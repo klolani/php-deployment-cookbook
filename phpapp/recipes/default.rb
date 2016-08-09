@@ -17,7 +17,7 @@ include_recipe "mysql::ruby"
 include_recipe "mysql2_chef_gem"
 
 apache_site "default" do
-  enable true
+  enable false
 end
 
 mysql_database node['phpapp']['database'] do
@@ -76,4 +76,10 @@ template node['phpapp']['path'] + '/wp-config.php' do
     :user            => node['phpapp']['db_username'],
     :password        => node['phpapp']['db_password'],
     :wp_secrets      => salt_data)
+end
+
+web_app 'phpapp' do
+  template 'site.conf.erb'
+  docroot node['phpapp']['path']
+  server_name node['phpapp']['server_name']
 end
